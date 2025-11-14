@@ -68,6 +68,15 @@ int main() {
                     lanes.at(lane).back().print();
                     break;
                 case (SWITCHES):
+                    int switchTo = rand() % (LANES - 1);
+                    switchTo += switchTo == lane;
+
+                    cout << "Switched to lane " << switchTo << ": ";
+
+                    lanes.at(switchTo).push_back(lanes.at(lane).back());
+                    lanes.at(lane).pop_back();
+                    lanes.at(switchTo).back().print();
+                    break;
             }
         }
 

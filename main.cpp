@@ -1,6 +1,6 @@
 /*
 COMSC-210 | Lab 32 | Rylan Der
-IDE Used: Visual Studio Code
+IDE Used: Visual Studio Code 
 */
 
 #include <iostream>

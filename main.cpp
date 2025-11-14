@@ -24,6 +24,7 @@ int main() {
     const int LANES = 4;
     const int LANE_SIZE = 2;
     const int LEAVE_PROBABILITY = 50;
+    enum Event {LEAVES, JOINS, SWITCHES};
 
     //Create and populate queue
     array<deque<Car>, LANES> lanes;
@@ -70,6 +71,7 @@ int main() {
 bool RollProbability(int percent) {
     return (rand() % 100) < percent; //rolls number from 0-99 inclusive, succeds if less than the given integer
 }
+
 
 /**
  * Prints a header message followed by all cars in the dequeue

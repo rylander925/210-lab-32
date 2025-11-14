@@ -16,8 +16,30 @@ void PrintQueue(deque<Car> queue, string headerMessage = "Queue:");
 
 int main() {
     const int SIZE = 2;
+    const int LEAVE_PROBABILITY = 55;
+    int cycles = 0;
+
     deque<Car> queue(SIZE);
-    for (Car car : queue) { car.print(); cout << endl; }
+    PrintQueue(queue, "Initial queue:");
+
+    //Runs simulation until line is empty
+    while(!queue.empty()) {
+        cout << "Time: " << ++cycles << " Operation: ";
+
+        //Rolls simulation, assuming a car either leaves or joins
+        if (RollProbability(LEAVE_PROBABILITY)) {
+            cout << "Car paid: ";
+            queue.front().print();
+            queue.pop_front();
+        } else {
+            cout << "Joined lane: ";
+            queue.push_back(Car());
+            queue.back().print();
+        }
+        cout << endl;
+
+        PrintQueue(queue);
+    }
 }
 
 /**
@@ -36,7 +58,13 @@ bool RollProbability(int percent) {
  */
 void PrintQueue(deque<Car> queue, string headerMessage) {
     cout << headerMessage << endl; //output header messaage
-    for (Car car : queue) {        //output all cars
+
+    if (queue.empty()) {           //check if empty
+        cout << "\tEmpty" << endl;
+        return;
+    }
+
+    for (Car car : queue) {        //otherwise output all cars
         cout << "\t";
         car.print();
         cout << endl;

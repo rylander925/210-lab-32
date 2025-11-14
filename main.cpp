@@ -30,6 +30,7 @@ int main() {
     array<deque<Car>, LANES> lanes;
     for(int i = 0; i < LANES; i++) lanes.at(i) = deque<Car>(LANE_SIZE);
 
+    cout << "Initial queue: " << endl;
     PrintLanes(lanes);
 
     //Runs simulation until line is empty
@@ -82,6 +83,10 @@ void PrintQueue(deque<Car> queue, string headerMessage) {
     }
 }
 
+/**
+ * Outputs an array of car queues
+ * @param lanes Array of car queues to output
+ */
 template<size_t numLanes>
 void PrintLanes(array<deque<Car>, numLanes> lanes) {
     int lane = 0;

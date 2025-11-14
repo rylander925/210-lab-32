@@ -15,10 +15,14 @@ bool RollProbability(int percent);
 void PrintQueue(deque<Car> queue, string headerMessage = "Queue:");
 
 int main() {
+    srand(time(0));
+    
     const int SIZE = 2;
     const int LEAVE_PROBABILITY = 55;
+
     int cycles = 0;
 
+    //Create and populate queue
     deque<Car> queue(SIZE);
     PrintQueue(queue, "Initial queue:");
 
@@ -36,8 +40,8 @@ int main() {
             queue.push_back(Car());
             queue.back().print();
         }
-        cout << endl;
 
+        //Displays queue at the end of each cycle
         PrintQueue(queue);
     }
 }
@@ -67,6 +71,6 @@ void PrintQueue(deque<Car> queue, string headerMessage) {
     for (Car car : queue) {        //otherwise output all cars
         cout << "\t";
         car.print();
-        cout << endl;
     }
+    cout << endl;
 }

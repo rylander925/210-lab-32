@@ -23,7 +23,7 @@ int main() {
     int cycles = 0;
 
     //Create and populate queue
-    deque<Car> queue(SIZE);
+    deque<Car> queue(SIZE); //automatically calls car constructor when initializing queue
     PrintQueue(queue, "Initial queue:");
 
     //Runs simulation until line is empty

@@ -20,11 +20,10 @@ void PrintLanes(array<deque<Car>, numLanes> lanes);
 
 int main() {
     srand(time(0));
+    const int MAX_CYCLES = 20;
     const int LANES = 4;
     const int LANE_SIZE = 2;
-    const int LEAVE_PROBABILITY = 55;
-
-    int cycles = 0;
+    const int LEAVE_PROBABILITY = 50;
 
     //Create and populate queue
     array<deque<Car>, LANES> lanes;
@@ -33,26 +32,34 @@ int main() {
     cout << "Initial queue: " << endl;
     PrintLanes(lanes);
 
-    //Runs simulation until line is empty
-    /*
-    while(!queue.empty()) {
-        cout << "Time: " << ++cycles << " Operation: ";
+    //Runs simulation based on specified number of cycles
+    for(int cycles = 1; cycles <= MAX_CYCLES; cycles++) {
+        cout << "Time: " << cycles << endl;
 
-        //Rolls simulation, assuming a car either leaves or joins
-        if (RollProbability(LEAVE_PROBABILITY)) {
-            cout << "Car paid: ";
-            queue.front().print();
-            queue.pop_front();
-        } else {
-            cout << "Joined lane: ";
-            queue.push_back(Car());
-            queue.back().print();
+        //Rolls probabilities for each lane and outputs results
+        for (int lane = 0; lane < LANE_SIZE; lane++) {
+            cout << "Lane: " << lane + 1 << " ";
+
+            //Rolls simulation, assuming a car either leaves or joins
+            if (RollProbability(LEAVE_PROBABILITY)) {
+
+                //Maintain probability of "leaving" but only actually leave if queue is not empty
+                if (!lanes.at(lane).empty()) {
+                    cout << "Car paid: ";
+                    lanes.at(lane).front().print();
+                    lanes.at(lane).pop_front();
+                }
+            } else {
+                cout << "Joined lane: ";
+                lanes.at(lane).push_back(Car());
+                lanes.at(lane).back().print();
+            }
         }
 
         //Displays queue at the end of each cycle
-        PrintQueue(queue);
+        PrintLanes(lanes);
+        cout << endl;
     }
-        */
 }
 
 /**

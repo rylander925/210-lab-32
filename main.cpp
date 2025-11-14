@@ -11,7 +11,11 @@ IDE Used: Visual Studio Code
 
 using namespace std;
 
+enum Event {LEAVES, JOINS, SWITCHES};
+
 bool RollProbability(int percent);
+
+Event RollEvents(int leaves, int joins, int switches);
 
 void PrintQueue(deque<Car> queue, string headerMessage = "Queue:");
 
@@ -23,8 +27,14 @@ int main() {
     const int MAX_CYCLES = 20;
     const int LANES = 4;
     const int LANE_SIZE = 2;
-    const int LEAVE_PROBABILITY = 50;
-    enum Event {LEAVES, JOINS, SWITCHES};
+
+    const int LEAVE_PROBABILITY = 46;
+    const int JOIN_PROBABILITY = 39;
+    const int SWITCH_PROBABILITY = 15;
+
+    const int EMPTY_LEAVE_PROBABILITY = 50;
+    const int EMPTY_JOIN_PROBABILITY = 50;
+
 
     //Create and populate queue
     array<deque<Car>, LANES> lanes;
@@ -41,19 +51,23 @@ int main() {
         for (int lane = 0; lane < LANE_SIZE; lane++) {
             cout << "Lane: " << lane + 1 << " ";
 
-            //Rolls simulation, assuming a car either leaves or joins
-            if (RollProbability(LEAVE_PROBABILITY)) {
-
-                //Maintain probability of "leaving" but only actually leave if queue is not empty
-                if (!lanes.at(lane).empty()) {
-                    cout << "Car paid: ";
-                    lanes.at(lane).front().print();
-                    lanes.at(lane).pop_front();
-                }
-            } else {
-                cout << "Joined lane: ";
-                lanes.at(lane).push_back(Car());
-                lanes.at(lane).back().print();
+            Event event = lanes.at(lane).empty() ? RollEvents(EMPTY_LEAVE_PROBABILITY, EMPTY_JOIN_PROBABILITY, 0) : RollEvents(LEAVE_PROBABILITY, JOIN_PROBABILITY, SWITCH_PROBABILITY);
+            switch(event) {
+                //Rolls simulation, assuming a car either leaves or joins
+                case (LEAVES):
+                    //Maintain probability of "leaving" but only actually leave if queue is not empty
+                    if (!lanes.at(lane).empty()) {
+                        cout << "Car paid: ";
+                        lanes.at(lane).front().print();
+                        lanes.at(lane).pop_front();
+                    }
+                    break;
+                case (JOINS):
+                    cout << "Joined lane: ";
+                    lanes.at(lane).push_back(Car());
+                    lanes.at(lane).back().print();
+                    break;
+                case (SWITCHES):
             }
         }
 
@@ -72,6 +86,16 @@ bool RollProbability(int percent) {
     return (rand() % 100) < percent; //rolls number from 0-99 inclusive, succeds if less than the given integer
 }
 
+/**
+ * Given weights of leaving, joining, or switching lanes, rolls an event
+ * @param leaves Chance of a car leaving queue
+ * @param joins Chance of a car joining queue
+ * @param switches Chance of
+ */
+Event RollEvents(int leaves, int joins, int switches) {
+    int num = rand() % (leaves + joins + switches); //rolls number between 0 and the total weight of all probabilities
+    return (num < (leaves + joins)) ? (num < leaves ? LEAVES : JOINS) : SWITCHES;  //determines result, from number, treating each weight as a range
+}
 
 /**
  * Prints a header message followed by all cars in the dequeue

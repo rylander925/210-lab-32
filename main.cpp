@@ -6,6 +6,7 @@ IDE Used: Visual Studio Code
 #include <iostream>
 #include <deque>
 #include <string>
+#include <array>
 #include "Car.h"
 
 using namespace std;
@@ -14,19 +15,25 @@ bool RollProbability(int percent);
 
 void PrintQueue(deque<Car> queue, string headerMessage = "Queue:");
 
+template<size_t numLanes>
+void PrintLanes(array<deque<Car>, numLanes> lanes);
+
 int main() {
     srand(time(0));
-    
-    const int SIZE = 2;
+    const int LANES = 4;
+    const int LANE_SIZE = 2;
     const int LEAVE_PROBABILITY = 55;
 
     int cycles = 0;
 
     //Create and populate queue
-    deque<Car> queue(SIZE); //automatically calls car constructor when initializing queue
-    PrintQueue(queue, "Initial queue:");
+    array<deque<Car>, LANES> lanes;
+    for(int i = 0; i < LANES; i++) lanes.at(i) = deque<Car>(LANE_SIZE);
+
+    PrintLanes(lanes);
 
     //Runs simulation until line is empty
+    /*
     while(!queue.empty()) {
         cout << "Time: " << ++cycles << " Operation: ";
 
@@ -44,6 +51,7 @@ int main() {
         //Displays queue at the end of each cycle
         PrintQueue(queue);
     }
+        */
 }
 
 /**
@@ -72,5 +80,13 @@ void PrintQueue(deque<Car> queue, string headerMessage) {
         cout << "\t";
         car.print();
     }
-    cout << endl;
+}
+
+template<size_t numLanes>
+void PrintLanes(array<deque<Car>, numLanes> lanes) {
+    int lane = 0;
+    for (deque<Car> queue : lanes) {
+        cout << "Lane " << ++lane << " ";
+        PrintQueue(queue);
+    }
 }

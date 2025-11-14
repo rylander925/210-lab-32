@@ -35,7 +35,6 @@ int main() {
     const int EMPTY_LEAVE_PROBABILITY = 50;
     const int EMPTY_JOIN_PROBABILITY = 50;
 
-
     //Create and populate queue
     array<deque<Car>, LANES> lanes;
     for(int i = 0; i < LANES; i++) lanes.at(i) = deque<Car>(LANE_SIZE);
@@ -51,31 +50,33 @@ int main() {
         for (int lane = 0; lane < LANES; lane++) {
             cout << "Lane: " << lane + 1 << " ";
 
+            //Determine the event by rolling a probability. Either use original weights, or do a 50/50 between 'leaving'/joining if lane is empty
             Event event = lanes.at(lane).empty() ? RollEvents(EMPTY_LEAVE_PROBABILITY, EMPTY_JOIN_PROBABILITY, 0) : RollEvents(LEAVE_PROBABILITY, JOIN_PROBABILITY, SWITCH_PROBABILITY);
+
             switch(event) {
-                //Rolls simulation, assuming a car either leaves or joins
-                case (LEAVES):
-                    //Maintain probability of "leaving" but only actually leave if queue is not empty
-                    if (!lanes.at(lane).empty()) {
+                case (LEAVES): //Removes car from front of queue 
+                    if (!lanes.at(lane).empty()) { //Maintain probability of "leaving" but only actually leave if queue is not empty
                         cout << "Car paid: ";
                         lanes.at(lane).front().print();
                         lanes.at(lane).pop_front();
                     } else {
-                        cout << "left enmpty." << endl;
+                        cout << "left empty." << endl;
                     }
                     break;
-                case (JOINS):
-                    //Adds a car to the back of the queue
+
+                case (JOINS): //Adds a car to the back of the queue
                     cout << "Joined lane: ";
                     lanes.at(lane).push_back(Car());
                     lanes.at(lane).back().print();
                     break;
-                case (SWITCHES):
-                    int switchTo = rand() % (LANES - 1);
+
+                case (SWITCHES): //Rolls a random lane to switch to, then switches a car to that lane
+                    int switchTo = rand() % (LANES - 1); //determine lane by rolling an index for 1-3 lanes, then add 1 if its equal to the current lane
                     switchTo += switchTo == lane;
 
                     cout << "Switched to Lane " << switchTo + 1 << ": ";
-
+                    
+                    //switch cars by copying the car to the back of the new lane and removing it from the old lane
                     lanes.at(switchTo).push_back(lanes.at(lane).back());
                     lanes.at(lane).pop_back();
                     lanes.at(switchTo).back().print();

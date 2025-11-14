@@ -65,6 +65,7 @@ int main() {
                     }
                     break;
                 case (JOINS):
+                    //Adds a car to the back of the queue
                     cout << "Joined lane: ";
                     lanes.at(lane).push_back(Car());
                     lanes.at(lane).back().print();

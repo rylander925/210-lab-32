@@ -48,7 +48,7 @@ int main() {
         cout << "Time: " << cycles << endl;
 
         //Rolls probabilities for each lane and outputs results
-        for (int lane = 0; lane < LANE_SIZE; lane++) {
+        for (int lane = 0; lane < LANES; lane++) {
             cout << "Lane: " << lane + 1 << " ";
 
             Event event = lanes.at(lane).empty() ? RollEvents(EMPTY_LEAVE_PROBABILITY, EMPTY_JOIN_PROBABILITY, 0) : RollEvents(LEAVE_PROBABILITY, JOIN_PROBABILITY, SWITCH_PROBABILITY);
@@ -60,6 +60,8 @@ int main() {
                         cout << "Car paid: ";
                         lanes.at(lane).front().print();
                         lanes.at(lane).pop_front();
+                    } else {
+                        cout << "left enmpty." << endl;
                     }
                     break;
                 case (JOINS):
@@ -71,7 +73,7 @@ int main() {
                     int switchTo = rand() % (LANES - 1);
                     switchTo += switchTo == lane;
 
-                    cout << "Switched to lane " << switchTo << ": ";
+                    cout << "Switched to Lane " << switchTo + 1 << ": ";
 
                     lanes.at(switchTo).push_back(lanes.at(lane).back());
                     lanes.at(lane).pop_back();
